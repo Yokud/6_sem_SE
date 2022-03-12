@@ -59,7 +59,7 @@ def PrintTable():
     print('-' * 175)
 
     for x in np.arange(0, x_end + x_step, x_step):
-        print("| {:^4.2f} | {:^30.6f} | {:^30.6f} | {:^30.6f} | {:^30.6f} | {:^12.6f} | {:^17.6f} |".format(x, Picar(x, 1), Picar(x, 2), Picar(x, 3), Picar(x, 4), Euler(0, 0, h / 6.4, x), RungeKutta(0, 0, h, x, 1)))
+        print("| {:^4.2f} | {:^30.6f} | {:^30.6f} | {:^30.6f} | {:^30.6f} | {:^12.6f} | {:^17.6f} |".format(x, Picar(x, 1), Picar(x, 2), Picar(x, 3), Picar(x, 4), Euler(0, 0, h, x), RungeKutta(0, 0, h, x, 1)))
 
     print('-' * 175)
     
@@ -130,7 +130,7 @@ def main():
     print("Runge-Kutta: u(2) =", RungeKutta(0, 0, h, 2, 1))
 
     PrintTable()
-    #PrintGraph()
+    PrintGraph()
 
 
 if __name__ == '__main__':
