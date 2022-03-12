@@ -24,11 +24,13 @@ def Euler(x0, u0, h, x):
 
     n = int(abs(x - x0) / h)
 
+    is_rev = 1 if x0 < x else -1
+
     for x in np.arange(n):
         cur_u += h * func(cur_x, cur_u)
         cur_x += h
 
-    return cur_u
+    return cur_u * is_rev
 
 
 def RungeKutta(x0, u0, h, x, alpha):
@@ -37,11 +39,13 @@ def RungeKutta(x0, u0, h, x, alpha):
 
     n = int(abs(x - x0) / h)
 
+    is_rev = 1 if x0 < x else -1
+
     for i in np.arange(n):
         cur_u += h * ((1 - alpha) * func(cur_x, cur_u) + alpha * func(cur_x + h / (2 * alpha), cur_u + h / (2 * alpha) * func(cur_x, cur_u)))
         cur_x += h
 
-    return cur_u
+    return cur_u * is_rev
 
 
 def PrintTable():
@@ -55,7 +59,7 @@ def PrintTable():
     print('-' * 175)
 
     for x in np.arange(0, x_end + x_step, x_step):
-        print("| {:^4.2f} | {:^30.6f} | {:^30.6f} | {:^30.6f} | {:^30.6f} | {:^12.6f} | {:^17.6f} |".format(x, Picar(x, 1), Picar(x, 2), Picar(x, 3), Picar(x, 4), Euler(0, 0, h, x), RungeKutta(0, 0, h, x, 1)))
+        print("| {:^4.2f} | {:^30.6f} | {:^30.6f} | {:^30.6f} | {:^30.6f} | {:^12.6f} | {:^17.6f} |".format(x, Picar(x, 1), Picar(x, 2), Picar(x, 3), Picar(x, 4), Euler(0, 0, h / 6.4, x), RungeKutta(0, 0, h, x, 1)))
 
     print('-' * 175)
     
@@ -126,7 +130,7 @@ def main():
     print("Runge-Kutta: u(2) =", RungeKutta(0, 0, h, 2, 1))
 
     PrintTable()
-    PrintGraph()
+    #PrintGraph()
 
 
 if __name__ == '__main__':
