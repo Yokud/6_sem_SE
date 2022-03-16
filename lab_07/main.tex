@@ -142,7 +142,15 @@
 	больше 1 и меньше 10.}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №3, language=lisp]
+(defun a1b10 (x) (and (> x 1) (< x 10)))
 
+(defun a1b10-lst (lst acc) 
+	(cond ((null lst) acc) 
+		((a1b10 (car lst)) (a1b10-lst (cdr lst) (cons (car lst) acc))) 
+		(t (a1b10-lst (cdr lst) acc))))
+		
+(defun above-one-below-ten (lst)
+	(my-reverse (a1b10-lst lst acc)))
 
 \end{lstlisting}
 
@@ -155,16 +163,33 @@ a) все элементы списка --- числа,
 6) элементы списка -- любые объекты.
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №4, language=lisp]
+; a)
+(defun nums-mul (lst mul) 
+	(cond ((null lst) nil)
+		  (t (cons (* (car lst) mul) (nums-mul (cdr lst) mul)))))
 
+; b)
+(defun nums-mul (lst mul)
+	(cond ((null lst) nil)
+		  ((numberp (car lst)) (cons (* (car lst) mul) (nums-mul (cdr lst) mul)))
+		  (t (cons (car lst) (nums-mul (cdr lst) mul)))))
 
 \end{lstlisting}
 
 \subsection*{5. Напишите функцию, select-between, которая из списка-аргумента, содержащего только
-	числа, выбирает только те, которые расположены между двумя указанными границамиаргументами и возвращает их в виде списка (упорядоченного по возрастанию списка чисел
+	числа, выбирает только те, которые расположены между двумя указанными границами-аргументами и возвращает их в виде списка (упорядоченного по возрастанию списка чисел
 	(+ 2 балла)).}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №5, language=lisp]
+(defun select-between-internal (from to lst acc)
+	(cond ((null lst) acc)
+		  (T (let ((head (car lst)))
+			 (cond ((and (< head to) (> head from)) 
+			 	   		(select-between-internal from to (cdr lst) (cons head acc)))
+				   (T (select-between-internal from to (cdr lst) acc)))))))
 
+(defun select-between (from to lst)
+	(my-reverse (select-between-internal from to lst nil)))
 	
 \end{lstlisting}
 
@@ -175,15 +200,36 @@ a) все элементы списка --- числа,
 
 б) структурированного.
 
+""\newline
 \begin{lstlisting}[label=6xd, caption=Решение задания №6, language=lisp]
+; a)
+(defun rec-add-internal (lst sum) 
+	(cond ((null lst) sum) 
+		  (t (rec-add-internal (cdr lst) (+ sum (car lst))))))
+		  
+(defun rec-add (lst) 
+	(rec-add-internal lst 0))
 
 
+; b)
+(defun rec-add-internal (lst sum) 
+	(cond ((null lst) sum) 
+		  ((numberp (car lst)) (rec-add-internal (cdr lst) (+ sum (car lst))))
+		  ((listp (car lst)) (rec-add-internal (cdr lst) (rec-add-internal (car lst) sum)))
+		  (t (rec-add-internal (cdr lst) sum))))
+
+(defun rec-add (lst) 
+	(rec-add-internal lst 0))
 \end{lstlisting}
 
 \subsection*{7. Написать рекурсивную версию с именем recnth функции nth.}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №7, language=lisp]	
-
+(defun recnth (lst n) 
+	(cond ((null lst) nil) 
+		  ((< n 0) nil) 
+		  ((= n 0) (car lst)) 
+		  (t (recnth (cdr lst) (- n 1)))))
 	
 \end{lstlisting}
 
@@ -191,7 +237,11 @@ a) все элементы списка --- числа,
 	нечетные.}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №8, language=lisp]
-	
+(defun allodd (lst) 
+	(cond ((null lst) nil) 
+		  ((null (cdr lst)) (oddp (car lst))) 
+		  ((oddp (car lst)) (allodd (cdr lst))) 
+		  (t nil)))
 	
 \end{lstlisting}
 
@@ -199,7 +249,11 @@ a) все элементы списка --- числа,
 	(структурированного), возможно создавая некоторые вспомогательные функции.}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №9, language=lisp]
-
+(defun first-odd (lst)
+	(cond ((null lst) nil)
+		  ((and (numberp (car lst)) (oddp (car lst))) (car lst))
+		  ((listp (car lst)) (first-odd (car lst)))
+		  (t (first-odd (cdr lst)))))
 
 \end{lstlisting}
 
@@ -208,7 +262,11 @@ a) все элементы списка --- числа,
 	квадратов этих чисел в том же порядке.}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №10, language=lisp]
-	
+(defun square-list (lst)
+	(cond ((null lst) lst)
+		  ((atom lst) (* lst lst))
+		  (T (cons (square-list (car lst))
+				   (square-list (cdr lst))))))
 	
 \end{lstlisting}
 
