@@ -59,7 +59,10 @@
 (defun nth-root (a n) 
     (exp (/ (log a) n)))
 
+(defun to-int (a) (multiple-value-bind (i f) (truncate a) i))
+
+(defun is-nth-root (a n) (eql a (expt (to-int (nth-root a n)) n)))
+
 (defun cok-radical-n (cok basis n) 
-    (let (res (nth-root (from-cok cok basis) n)) 
-        (cond (() (to-cok res)) 
-                (t Nil)))
+    (cond ((is-nth-root (from-cok cok basis) n) (to-cok (to-int (nth-root (from-cok cok basis) n)) basis))
+            (t Nil)))
