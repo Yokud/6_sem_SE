@@ -1,3 +1,4 @@
+;;;; List of lists
 (defun first-column (matrix)
   (cond ((null matrix) nil)
         (t (cons (car (car matrix)) (first-column (cdr matrix))))))
@@ -40,12 +41,36 @@
 (defun nappend-elem (lst el) 
     (nconc lst (cons el nil)))
 
+(defun alg-add (matr det i j) 
+    (* (expt -1 (+ i j)) (/ (ll-determinant (del-intersec matr i j)) det)))
+
 (defun inv-matr (matr det i j n res acc) 
     (cond ((= i n) (ll-transpose res))
           ((= j n) (inv-matr matr det (+ i 1) 0 n (nappend-elem res acc) ()))
-          (t (inv-matr matr det i (+ j 1) n res (nappend-elem acc (* (expt -1 (+ i j)) (/ (ll-determinant (del-intersec matr i j)) det)))))))
+          (t (inv-matr matr det i (+ j 1) n res (nappend-elem acc (alg-add matr det i j))))))
 
 (defun ll-inverse-matrix (matr)
     (let ((det (ll-determinant matr)))
         (cond ((or (eql det nil) (eql 0 det)) nil)
             (t (inv-matr matr det 0 0 (length matr) () ())))))
+
+
+(defun ll-matrix-elem (matr i j) 
+    (nth j (nth i matr)))
+
+(defun ll-matrix-to-step (matr i j k n m res acc) 
+    (cond ((= k (- n 1)) res)
+          ((= i n) (ll-matrix-to-step matr 0 0 (+ k 1) n m res ()))
+          ((= j m) (ll-matrix-to-step matr (+ i 1) 0 k n m (nappend-elem res acc) ()))
+          (t (cond ((<= i k) (ll-matrix-to-step matr i (+ j 1) k n m res (nappend-elem acc (ll-matrix-elem matr i j))))
+                    ((and (> i k) (> j k)) (ll-matrix-to-step matr i (+ j 1) k n m res (nappend-elem acc 
+                                                (- (ll-matrix-elem matr i j) (* (ll-matrix-elem matr k j) (/ (ll-matrix-elem matr i k) (ll-matrix-elem matr k k)))))))
+                    (t (ll-matrix-to-step matr i (+ j 1) k n m res (nappend-elem acc 0)))))))
+
+(defun ll-matrix-rank (matr) 
+    ())
+
+
+;;;; Array
+(defun arr-transpose (matr) 
+    ())
