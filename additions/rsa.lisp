@@ -34,3 +34,24 @@
 
 (defun rsa-decode (c d n)
     (mod (expt c d) n))
+
+
+(defun rsa-fcode (f-in f-out e n) 
+    (with-open-file (stream f-in)
+    (do ((char (read-char stream nil)
+               (read-char stream nil)))
+        ((null char))
+      (with-open-file (str f-out :direction :output 
+                                    :if-exists :append
+						            :if-does-not-exist :create) 
+        (format str "~A " (rsa-code (char-code char) e n))))))
+
+(defun rsa-fdecode (f-in f-out d n) 
+    (with-open-file (stream f-in)
+    (do ((strnum (read-preserving-whitespace stream nil)
+               (read-preserving-whitespace stream nil)))
+        ((null strnum))
+      (with-open-file (str f-out :direction :output 
+                                    :if-exists :append
+						            :if-does-not-exist :create) 
+        (format str "~A" (code-char (rsa-decode strnum d n)))))))
