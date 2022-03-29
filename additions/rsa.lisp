@@ -37,21 +37,36 @@
 
 
 (defun rsa-fcode (f-in f-out e n) 
-    (with-open-file (stream f-in)
-    (do ((char (read-char stream nil)
-               (read-char stream nil)))
-        ((null char))
-      (with-open-file (str f-out :direction :output 
-                                    :if-exists :append
+    (let ((code (map 'list #'(lambda (x) (rsa-code (char-code x) e n)) (with-open-file (stream f-in) (read-line stream)))))
+        (with-open-file (str f-out :direction :output 
+                                    :if-exists :supersede
 						            :if-does-not-exist :create) 
-        (format str "~A " (rsa-code (char-code char) e n))))))
+        (mapcar #'(lambda (x) (format str "~A " x)) code)) nil))
 
 (defun rsa-fdecode (f-in f-out d n) 
-    (with-open-file (stream f-in)
-    (do ((strnum (read-preserving-whitespace stream nil)
-               (read-preserving-whitespace stream nil)))
-        ((null strnum))
-      (with-open-file (str f-out :direction :output 
-                                    :if-exists :append
+    (let ((code (mapcar #'(lambda (x) (code-char (rsa-decode (parse-integer x) d n))) (str:words (with-open-file (stream f-in) (read-line stream))))))
+        (with-open-file (str f-out :direction :output 
+                                    :if-exists :supersede
 						            :if-does-not-exist :create) 
-        (format str "~A" (code-char (rsa-decode strnum d n)))))))
+        (mapcar #'(lambda (x) (format str "~A" x)) code)) nil))
+
+
+; Тесты :3
+(fiveam:test rsa-tests 
+    (fiveam:is (eql t (coprimep 2 3))
+    (fiveam:is (eql nil (coprimep 2 4)))
+    (fiveam:is (eql 2 (div 5 2))))
+    (fiveam:is (eql 3 (modular-inverse 2 5)))
+    (fiveam:is (eql 65537 (chose-e 666666)))
+    (fiveam:is (eql 257 (chose-e 300)))
+    (fiveam:is (eql 17 (chose-e 30)))
+    (fiveam:is (eql 3 (chose-e 15)))
+    (fiveam:is (equal '((3 . 187) (27 . 187)) (rsa-gen-key 11 17)))
+    (fiveam:is (eql 140 (rsa-code 13 3 187)))
+    (fiveam:is (eql 13 (rsa-decode 140 27 187)))
+    (fiveam:is (equal "183 118 80 80 100 43 102 100 130 80 111 33 " (progn 
+                                                                        (rsa-fcode "c:\\Users\\Yokud\\Desktop\\temp.txt" "c:\\Users\\Yokud\\Desktop\\temp1.txt" 3 187) 
+                                                                        (with-open-file (stream "c:\\Users\\Yokud\\Desktop\\temp1.txt") (read-line stream)))))
+    (fiveam:is (equal "Hello world!" (progn 
+                                        (rsa-fdecode "c:\\Users\\Yokud\\Desktop\\temp1.txt" "c:\\Users\\Yokud\\Desktop\\temp2.txt" 27 187) 
+                                        (with-open-file (stream "c:\\Users\\Yokud\\Desktop\\temp2.txt") (read-line stream))))))
