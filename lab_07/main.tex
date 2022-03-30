@@ -172,6 +172,7 @@ a) все элементы списка --- числа,
 (defun nums-mul (lst mul)
 	(cond ((null lst) nil)
 		  ((numberp (car lst)) (cons (* (car lst) mul) (nums-mul (cdr lst) mul)))
+		  ((listp (car lst)) (cons (nums-mul (car lst) mul) (nums-mul (cdr lst) mul)))
 		  (t (cons (car lst) (nums-mul (cdr lst) mul)))))
 
 \end{lstlisting}
@@ -181,15 +182,13 @@ a) все элементы списка --- числа,
 	(+ 2 балла)).}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №5, language=lisp]
-(defun select-between-internal (from to lst acc)
-	(cond ((null lst) acc)
-		  (T (let ((head (car lst)))
-			 (cond ((and (< head to) (> head from)) 
-			 	   		(select-between-internal from to (cdr lst) (cons head acc)))
-				   (T (select-between-internal from to (cdr lst) acc)))))))
+(defun betweenp (el b1 b2)
+	(< (* (- el b1) (- el b2)) 0))
 
-(defun select-between (from to lst)
-	(my-reverse (select-between-internal from to lst nil)))
+(defun select-between (lst b1 b2)
+	(cond ((null lst) nil)
+			((betweenp (car lst) b1 b2) (cons (car lst) (select-between (cdr lst) b1 b2)))
+			(T (select-between (cdr lst) b1 b2))))
 	
 \end{lstlisting}
 
@@ -250,10 +249,13 @@ a) все элементы списка --- числа,
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №9, language=lisp]
 (defun first-odd (lst)
-	(cond ((null lst) nil)
-		  ((and (numberp (car lst)) (oddp (car lst))) (car lst))
-		  ((listp (car lst)) (first-odd (car lst)))
-		  (t (first-odd (cdr lst)))))
+	(cond ((null lst) nil) 
+			((numberp (car lst)) (cond ((oddp (car lst)) (car lst)) 
+										(t (fodd (cdr lst)))))
+			((listp (car lst)) (let ((tmp (fodd (car lst)))) 
+									(cond ((null tmp) (fodd (cdr lst))) 
+											(t tmp))))
+			(T (fodd (cdr lst)))))
 
 \end{lstlisting}
 

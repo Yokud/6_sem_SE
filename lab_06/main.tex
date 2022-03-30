@@ -139,7 +139,8 @@ a) все элементы списка --- числа,
 (defun compl-mult-all-numbers (mult lst)
 	(mapcar #'(lambda (el) 
 				(cond ((listp el) (compl-mult-all-numbers mult el))
-						(T (* el mult))))
+						((numberp el) (* el mult))
+						(t el)))
 			lst))
 
 \end{lstlisting}
@@ -148,18 +149,26 @@ a) все элементы списка --- числа,
 	является ли он палиндромом (то есть равны ли lst и (reverse lst)).}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №3, language=lisp]
-(defun is-palindrome (lst1 lst2) 
-	(funcall #'equal lst1 (reverse lst2)))
+(defun to-pairs (lst1 lst2)
+	(mapcar #'equal lst1 lst2))
+
+(defun is-same (lst1 lst2)
+	(every #'identity (to-pairs lst1 lst2)))
+
+(defun is-palyndrome (lst)
+	(is-same lst (reverse lst)))
 
 \end{lstlisting}
 
 \subsection*{4. Написать предикат set-equal, который возвращает t, если два его множества-аргумента содержат одни и те же элементы, порядок которых не имеет значения.}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №4, language=lisp]
-(defun set-equal (set1 set2)
-	(if (= (length set1) (length set2))
-		(and (subsetp set1 set2) (subsetp set2 set1))
-		Nil))
+(defun comp (lst1 lst2)
+	(every #'identity (mapcar #'(lambda (elem)
+								(if (find-if #'(lambda (x) (equal elem x)) lst2) T))
+						lst1)))
+
+(defun set-equal (lst1 lst2) (if (= (length lst1) (length lst2)) (comp lst1 lst2)))
 
 \end{lstlisting}
 
@@ -177,16 +186,15 @@ a) все элементы списка --- числа,
 	(+ 2 балла)).}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №6, language=lisp]
-(defun get-n (n lst acc)
-	(cond ((or (null lst) (<= n 0)) (reverse acc))
-		(T (get-n (- n 1) (cdr lst) (cons (car lst) acc)))))
+(defun betweenp (el b1 b2)
+	(< (* (- el b1) (- el b2)) 0))
 
-(defun select-between (from to lst)
-	(sort (get-n (+ (- to from) 1) (nthcdr from lst) Nil) #'<))
+(defun select-between (lst b1 b2)
+	(mapcan #'(lambda (elem) (if (betweenp elem b1 b2) (list elem))) lst))
 
 \end{lstlisting}
 
-\subsection*{7. Написать функцию, вычисляющую декартово произведение двух своих списковаргументов. ( Напомним, что А х В это множество всевозможных пар (a b), где а
+\subsection*{7. Написать функцию, вычисляющую декартово произведение двух своих списков-аргументов. ( Напомним, что А х В это множество всевозможных пар (a b), где а
 	принадлежит А, принадлежит В.)}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №7, language=lisp]	
@@ -217,7 +225,7 @@ a) все элементы списка --- числа,
 \begin{lstlisting}[label=6xd, caption=Решение задания №9, language=lisp]
 (defun sum-lens (list-of-lists)
 	(reduce #'(lambda (acc lst) (+ acc (length lst)))
-			(cons 0 list-of-lists)))
+			list-of-lists :initial-value 0))
 
 \end{lstlisting}
 

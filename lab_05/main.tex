@@ -205,18 +205,19 @@
 
 \end{lstlisting}
 
+\newpage
 \subsection*{7. Напишите функцию, которая добавляет к множеству двухэлементных списков новый
 	двухэлементный список, если его там нет.}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №7, language=lisp]	
 (defun is-double-in-set (lst double) 
 	(cond ((null lst) nil) 
-			((and (eql (caar lst)) (eql (cdar lst) (cdr double))) t)
+			((and (eql (caar lst) (car double)) (eql (cadar lst) (cadr double))) t)
 			(t (is-double-in-set (cdr lst) double))))
 			
 (defun inner-append-double-lst (lst double)
 	(cond ((null (cdr lst)) (cons (car lst) (cons double nil)))
-			(t (cons (car lst) (inner-append-double-lst) (cdr lst) double))))
+			(t (cons (car lst) (inner-append-double-lst (cdr lst) double)))))
 			
 (defun append-double-lst (lst double)
 	(if (is-double-in-set lst double)
@@ -246,17 +247,19 @@ a) все элементы списка --- числа,
 
 \end{lstlisting}
 
+\newpage
 \subsection*{9. Напишите функцию, select-between, которая из списка-аргумента из 5 чисел выбирает
 	только те, которые расположены между двумя указанными границами-аргументами и
 	возвращает их в виде списка (упорядоченного по возрастанию списка чисел (+ 2 балла)).}
 
 \begin{lstlisting}[label=6xd, caption=Решение задания №9, language=lisp]
-(defun get-n (n lst acc)
-	(cond ((or (null lst) (<= n 0)) (reverse acc))
-		(T (get-n (- n 1) (cdr lst) (cons (car lst) acc)))))
+(defun betweenp (el b1 b2)
+	(< (* (- el b1) (- el b2)) 0))
 
-(defun select-between (from to lst)
-	(sort (get-n (+ (- to from) 1) (nthcdr from lst) Nil) #'<))
+(defun select-between (lst b1 b2)
+	(cond ((null lst) nil)
+			((betweenp (car lst) b1 b2) (cons (car lst) (select-between (cdr lst) b1 b2)))
+			(T (select-between (cdr lst) b1 b2))))
 
 \end{lstlisting}
 
