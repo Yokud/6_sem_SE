@@ -243,6 +243,7 @@ a) все элементы списка --- числа,
 (defun first-num-mul (lst mul)
 	(cond ((null lst) nil)
 			((numberp (car lst)) (cons (* (car lst) mul) (cdr lst)))
+			((listp (car lst)) (cons (first-num-mul (car lst) mul)) (first-num-mul (cdr lst) mul))
 			(t (cons (car lst) (first-num-mul (cdr lst) mul)))))
 
 \end{lstlisting}
