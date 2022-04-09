@@ -194,10 +194,11 @@ def trace_p(init, end):
 
 def main():
     u0, ksi = shooting()
-
-    print("ξ обеспечивает решение на диапазоне от {0} до 1".format(ksi))
     
     u, f, z = __shooting(u0)
+
+    print("u(0) = {0}".format(u0))
+    print("u(1) = {0} \nF(1) = {1} \nFmax = {2}".format(u[-1], f[-1], max(f)))
     up_v = []
     for zi in z:
         up_v.append(up(zi))
@@ -211,8 +212,8 @@ def main():
     pylab.legend()
 
     ax2 = pylab.subplot(1, 2, 2)
-    pylab.plot(z, up_v, label = "Up(z)")
-    pylab.plot(z, u, label = "U(z)")
+    pylab.plot(z, up_v, label = "up(z)")
+    pylab.plot(z, u, label = "u(z)")
     pylab.legend()
 
     ax2.yaxis.set_major_formatter(formatter)
@@ -223,7 +224,7 @@ def main():
    
     pylab.figure(2)
 
-    
+    '''
     val, us = trace_R0(0, 100)
     global R0
     R0 = 0.35
@@ -260,7 +261,7 @@ def main():
     pylab.legend()
     
     pylab.show()
-    
+    '''
 
 
 if __name__ == "__main__":
