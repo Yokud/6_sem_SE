@@ -112,6 +112,79 @@
 	
 	\setcounter{page}{2}
 
+\chapter*{Лабораторная работа №11}
+\section*{Задание}
+
+Разработать свою программу -- <<Телефонный справочник>>. Протестировать работу программы.
+
+\section*{Решение}
+\begin{lstlisting}
+domains
+	name = string
+	phone = string
+	city = string
+	street = string
+	home = integer
+	
+predicates
+	record(name, phone, city, street, home)
+	
+clauses
+	record("Ivan", "+79631416412", "Moscow", "Frunzenskaya", 15).
+	record("Peter", "+79123456789", "Saint Peterburg", "Nevskaya", 27).
+	record("Sergey", "+79335436781", "Moscow", "Obychnaya", 5).
+	record("Marya", "+79027531212", "Moscow", "Yartsevskaya", 13).
+	record("Michail", "+79635432121", "Tver", "Chekhovskaya", 33).
+	
+goal
+	record(Name, Phone, "Moscow", Street, Home).
+\end{lstlisting}
+
+
+\chapter*{Лабораторная работа №11(2)}
+\section*{Задание}
+
+Составить программу -- базу знаний, с помощью которой можно определить, например, множество студентов, обучающихся в одном ВУЗе и их телефоны. Студент может одновременно обучаться в нескольких ВУЗах. Привести примеры возможных вариантов вопросов и варианты ответов (не менее 3-х). Описать порядок формирования вариантов ответа.
+
+Исходную базу знаний сформировать с помощью только фактов.
+
+*Исходную базу знаний сформировать, используя правила.
+
+**Разработать свою базу знаний (содержание произвольно).
+
+\section*{Решение}
+\begin{lstlisting}
+domains
+	name = string
+	surname = string
+	phone = string
+	university = string
+	group = string
+	course = integer
+
+predicates
+	student(name, surname, phone, university, group, course)
+
+clauses
+	student("Ivan", "Malyshev", "+78005553535", "BMSTU", "IU7-61B", 3).
+	student("Nikita", "Shatskiy", "+79996663232", "BMSTU", "IU7-61B", 3).
+	student("Ivan", "Ivanov", "+79543432255", "MIPT", "LFI-14", 1).
+	student("Sergey", "Simonov", "+79342221314", "MAI", "ACS-32", 2).
+	student("Ivan", "Malyshev", "+78005553535", "MIPT", "FIVT-5", 5).
+	student("Petr", "Grinev", "+79456784433", "MSU", "VMK-4", 4).
+	student("Maria", "Bublikova", "+79554327788", University, Group, Course) :- student(\_, "Ivanov", \_, University, Group, Course).
+
+goal
+	student("Ivan", Surname, Phone, University, Group, Course).
+	student(Name, Surname, Phone, "BMSTU", \_, 3).
+	student("Ivan", \_, \_, \_, "IU7-61B", \_).
+\end{lstlisting}
+
+С помощью первого вопроса получаются все студенты с именем Иван. Происходит проход сверху вниз по всем фактам предиката \emph{student(name, surname, phone, university, group, course)} и осуществляется унификация с \emph{student(''Ivan'', Surname, Phone, University, Group, Course)}. Унификацию успешно проходит три факта: \emph{student(''Ivan'', ''Malyshev'', ''+78005553535'', ''BMSTU'', ''IU7-61B'', 3)}, \emph{student(''Ivan'', ''Ivanov'', ''+79543432255'', ''MIPT'', ''LFI-14'', 1)} и \emph{student(''Ivan'', ''Malyshev'', ''+78005553535'', ''MIPT'', ''FIVT-5'', 5)}.\\
+
+С помощью второго вопроса получаются все студенты МГТУ, которые обучаются на 3 курсе.  Происходит проход по всем фактам предиката \emph{student(name, surname, phone, university, group, course)} и осуществляется унификация с \emph{student(Name, Surname, Phone, ''BMSTU'', \_, 3)}.  Успешно унификацию проходят факты \emph{student(''Ivan'', ''Malyshev'', ''+78005553535'', ''BMSTU'', ''IU7-61B'', 3)} и \emph{student(''Nikita", ''Shatskiy'', ''+79996663232'', ''BMSTU'', ''IU7-61B'', 3)}.\\
+
+С помощью третьего вопроса получаются все Иваны, которые обучаются в группе ИУ7-61Б.  Происходит проход по всем фактам предиката \emph{student(name, surname, phone, university, group, course)} и осуществляется унификация с \emph{student(''Ivan'', \_, \_, \_, ''IU7-61B'', \_)}.  Успешно унификацию проходит \emph{student(''Ivan'', ''Malyshev'', ''+78005553535'', ''BMSTU'', ''IU7-61B'', 3)}.\\
 
 
 \end{document}
