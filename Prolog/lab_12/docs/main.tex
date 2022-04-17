@@ -181,9 +181,131 @@ goal
 	bank_and_street_by_surname_and_city("Malyshev", "Moscow", X, Y, Z).
 \end{lstlisting}
 
+\subsection*{SQL-аналог}
+\begin{lstlisting}
+-- Domains
+create type addres 
+(
+	city string not null,
+	street string not null,
+	home integer not null,
+	flat integer not null
+);
+	
+-- Predicates
+create table phone_book
+(
+	surname string not null,
+	phone string not null,
+	adress adress not null
+);
+	
+create table car
+(
+	surname string not null,
+	brand string not null,
+	color string not null,
+	cost integer not null
+);
+	
+create table deposit
+(
+	surname string not null,
+	bank string not null,
+	account integer not null,
+	summ integer not null
+);
+	
+create table car_by_phone as
+	select phone, surname, srand, sost
+	from phone_book join car on phone_book.surname = car.surname;
+	
+create table brand_by_phone as
+	select phone, brand
+	from car_by_phone;
+	
+create table bank_and_street_by_surname_and_city as
+	select Surname, address.city, bank, address.street, phone
+	from phone_book join deposit on phone_book.surname = deposit.surname;
+	
+-- Clauses
+insert into phone_book values
+	("Malyshev", "+78005553535", address("Moscow", "Obychnaya", 11, 2)),
+	("Shatskiy", "+71231421433", address("Saint Peterburg", "Olenevaya", 12, 4)),
+	("Voronin", "+71454663765", address("Saratov", "Bychkovaya", 12, 11)),
+	("Gribochkov", "+71531432289", address("Tver", "Tomatnaya", 12, 7)),
+	("Sazonov", "+71766543721", address("Moscow", "Marmeladnaya", 13, 6)),
+	("Tsetochkin", "+71728332062", address("Tver", "Kabachkovaya", 16, 1));
+	
+insert into car values
+	("Shatskiy", "Suzuki", "red", 10000000),
+	("Gribochkov", "BMW", "yellow", 15000000),
+	("Voronin", "Volga", "black", 20000000);
+	
+insert into deposit values
+	("Sazonov", "Sber", 145464235, 1000),
+	("Shatskiy", "Tinkoff", 585642576, 20000),
+	("Voronin", "Raif", 346536624, 100000),
+	("Malyshev", "Sber", 364562663, 10000);
+	
+-- Goal
+select *
+from car_by_phone
+where phone = "+71231421433";
+
+select * 
+from brand_by_phone
+where phone = "+71531432289";
+
+select *
+from bank_and_street_by_surname_and_city
+where surname = "Malyshev" and city = "Moscow";
+	
+\end{lstlisting}
+
 \section*{Описание порядка поиска ответа}
 
+\subsection*{Задание 1а}
 
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{9 cm}|p{9 cm}|}
+			\hline
+			№ шага & Сравниваемые термы; результат; подстановка, если есть & Дальнейшие действия: прямой ход или откат (к чему приводит?) \\
+			\hline 
+			... & ... & ... \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table} 
+
+\subsection*{Задание 1b}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{9 cm}|p{9 cm}|}
+			\hline
+			№ шага & Сравниваемые термы; результат; подстановка, если есть & Дальнейшие действия: прямой ход или откат (к чему приводит?) \\
+			\hline 
+			... & ... & ... \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table} 
+
+\subsection*{Задание 2}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{9 cm}|p{9 cm}|}
+			\hline
+			№ шага & Сравниваемые термы; результат; подстановка, если есть & Дальнейшие действия: прямой ход или откат (к чему приводит?) \\
+			\hline 
+			... & ... & ... \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table} 
 
 \chapter*{Лабораторная работа №12(2)}
 \section*{Задание}
@@ -259,4 +381,98 @@ clauses
 goal
 	surname_city_phone_bank_by_brand_color("Suzuki", "red", Surname, City, Phone, Bank).
 \end{lstlisting}
+
+\subsection*{SQL-аналог}
+\begin{lstlisting}
+-- Domains
+create type addres 
+(
+	city string not null,
+	street string not null,
+	home integer not null,
+	flat integer not null
+);
+	
+-- Predicates
+create table phone_book
+(
+	surname string not null,
+	phone string not null,
+	adress adress not null
+);
+	
+create table car
+(
+	surname string not null,
+	brand string not null,
+	color string not null,
+	cost integer not null
+);
+	
+create table deposit
+(
+	surname string not null,
+	bank string not null,
+	account integer not null,
+	summ integer not null
+);
+	
+create table car_by_phone as
+	select phone, surname, srand, sost
+	from phone_book join car on phone_book.surname = car.surname;
+	
+create table brand_by_phone as
+	select phone, brand
+	from car_by_phone;
+	
+create table bank_and_street_by_surname_and_city as
+	select Surname, address.city, bank, address.street, phone
+	from phone_book join deposit on phone_book.surname = deposit.surname;
+	
+create table surname_city_phone_bank_by_brand_color as
+	select brand, color, surname, adress.city, phone, bank
+	from (car join phone_book on car.surname = phone_book.surname) as cp join deposit on cp.surname = deposit.surname;
+	
+-- Clauses
+insert into phone_book values
+	("Malyshev", "+78005553535", address("Moscow", "Obychnaya", 11, 2)),
+	("Shatskiy", "+71231421433", address("Saint Peterburg", "Olenevaya", 12, 4)),
+	("Voronin", "+71454663765", address("Saratov", "Bychkovaya", 12, 11)),
+	("Gribochkov", "+71531432289", address("Tver", "Tomatnaya", 12, 7)),
+	("Sazonov", "+71766543721", address("Moscow", "Marmeladnaya", 13, 6)),
+	("Tsetochkin", "+71728332062", address("Tver", "Kabachkovaya", 16, 1));
+	
+insert into car values
+	("Shatskiy", "Suzuki", "red", 10000000),
+	("Gribochkov", "BMW", "yellow", 15000000),
+	("Voronin", "Volga", "black", 20000000);
+	
+insert into deposit values
+	("Sazonov", "Sber", 145464235, 1000),
+	("Shatskiy", "Tinkoff", 585642576, 20000),
+	("Voronin", "Raif", 346536624, 100000),
+	("Malyshev", "Sber", 364562663, 10000);
+	
+-- Goal
+select *
+from surname_city_phone_bank_by_brand_color
+where brand = "Suzuki" and color = "red";
+	
+\end{lstlisting}
+
+
+\section*{Описание порядка поиска ответа}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{9 cm}|p{9 cm}|}
+			\hline
+			№ шага & Сравниваемые термы; результат; подстановка, если есть & Дальнейшие действия: прямой ход или откат (к чему приводит?) \\
+			\hline 
+			... & ... & ... \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table} 
+
 \end{document}
