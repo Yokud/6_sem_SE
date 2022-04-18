@@ -30,25 +30,106 @@
 \definecolor{types}{rgb}{0.17,0.57,0.68}
 
 \usepackage{listings}
-\lstset{language=[Sharp]C,
-	captionpos=t,
-	numbers=left, %Nummerierung
-	numberstyle=\small, % kleine Zeilennummern
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\lstset{language=Matlab,%
+	%basicstyle=\color{red},
+	breaklines=true,%
 	frame=single, % Oberhalb und unterhalb des Listings ist eine Linie
-	stepnumber=1,                   
-	numbersep=5pt,                
-	showspaces=false,
-	tabsize=2,
-	showtabs=false,
-	breaklines=true,
-	showstringspaces=false,
-	breakatwhitespace=true,
-	escapeinside={(*@}{@*)},
-	commentstyle=\color{greencomments},
-	morekeywords={partial, var, value, get, set},
-	keywordstyle=\color{bluekeywords},
-	stringstyle=\color{redstrings},
-	basicstyle=\ttfamily\small,
+	morekeywords={matlab2tikz},
+	keywordstyle=\color{blue},%
+	morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+	identifierstyle=\color{black},%
+	stringstyle=\color{red},
+	commentstyle=\color{black},%
+	showstringspaces=false,%without this there will be a symbol in the places where there is a space
+	numbers=left,%
+	numberstyle={\tiny \color{black}},% size of the numbers
+	numbersep=9pt, % this defines how far the numbers are from the text
+	emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+	%emph=[2]{word1,word2}, emphstyle=[2]{style},    
+	literate={Ö}{{\"O}}1
+	{Ä}{{\"A}}1
+	{Ü}{{\"U}}1
+	{ß}{{\ss}}1
+	{ü}{{\"u}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+	{~}{{\textasciitilde}}1
+	{а}{{\selectfont\char224}}1
+	{б}{{\selectfont\char225}}1
+	{в}{{\selectfont\char226}}1
+	{г}{{\selectfont\char227}}1
+	{д}{{\selectfont\char228}}1
+	{е}{{\selectfont\char229}}1
+	{ё}{{\"e}}1
+	{ж}{{\selectfont\char230}}1
+	{з}{{\selectfont\char231}}1
+	{и}{{\selectfont\char232}}1
+	{й}{{\selectfont\char233}}1
+	{к}{{\selectfont\char234}}1
+	{л}{{\selectfont\char235}}1
+	{м}{{\selectfont\char236}}1
+	{н}{{\selectfont\char237}}1
+	{о}{{\selectfont\char238}}1
+	{п}{{\selectfont\char239}}1
+	{р}{{\selectfont\char240}}1
+	{с}{{\selectfont\char241}}1
+	{т}{{\selectfont\char242}}1
+	{у}{{\selectfont\char243}}1
+	{ф}{{\selectfont\char244}}1
+	{х}{{\selectfont\char245}}1
+	{ц}{{\selectfont\char246}}1
+	{ч}{{\selectfont\char247}}1
+	{ш}{{\selectfont\char248}}1
+	{щ}{{\selectfont\char249}}1
+	{ъ}{{\selectfont\char250}}1
+	{ы}{{\selectfont\char251}}1
+	{ь}{{\selectfont\char252}}1
+	{э}{{\selectfont\char253}}1
+	{ю}{{\selectfont\char254}}1
+	{я}{{\selectfont\char255}}1
+	{А}{{\selectfont\char192}}1
+	{Б}{{\selectfont\char193}}1
+	{В}{{\selectfont\char194}}1
+	{Г}{{\selectfont\char195}}1
+	{Д}{{\selectfont\char196}}1
+	{Е}{{\selectfont\char197}}1
+	{Ё}{{\"E}}1
+	{Ж}{{\selectfont\char198}}1
+	{З}{{\selectfont\char199}}1
+	{И}{{\selectfont\char200}}1
+	{Й}{{\selectfont\char201}}1
+	{К}{{\selectfont\char202}}1
+	{Л}{{\selectfont\char203}}1
+	{М}{{\selectfont\char204}}1
+	{Н}{{\selectfont\char205}}1
+	{О}{{\selectfont\char206}}1
+	{П}{{\selectfont\char207}}1
+	{Р}{{\selectfont\char208}}1
+	{С}{{\selectfont\char209}}1
+	{Т}{{\selectfont\char210}}1
+	{У}{{\selectfont\char211}}1
+	{Ф}{{\selectfont\char212}}1
+	{Х}{{\selectfont\char213}}1
+	{Ц}{{\selectfont\char214}}1
+	{Ч}{{\selectfont\char215}}1
+	{Ш}{{\selectfont\char216}}1
+	{Щ}{{\selectfont\char217}}1
+	{Ъ}{{\selectfont\char218}}1
+	{Ы}{{\selectfont\char219}}1
+	{Ь}{{\selectfont\char220}}1
+	{Э}{{\selectfont\char221}}1
+	{Ю}{{\selectfont\char222}}1
+	{Я}{{\selectfont\char223}}1
+	{і}{{\selectfont\char105}}1
+	{ї}{{\selectfont\char168}}1
+	{є}{{\selectfont\char185}}1
+	{ґ}{{\selectfont\char160}}1
+	{І}{{\selectfont\char73}}1
+	{Ї}{{\selectfont\char136}}1
+	{Є}{{\selectfont\char153}}1
+	{Ґ}{{\selectfont\char128}}1
 }
 
 \usepackage[left=2cm,right=2cm, top=1cm,bottom=2cm,bindingoffset=0cm]{geometry}
@@ -130,6 +211,11 @@
 	\end{enumerate}
 	\item Провести вычисления и построить графики для выборки из индивидуального варианта.
 \end{enumerate}
+
+\section*{Вариант выборки}
+Вариант 12
+
+$\vec{X}$=(11.89,9.60,9.29,10.06,9.50,8.93,9.58,6.81,8.69,9.62,9.01,10.59,10.50,11.53,9.94,8.84,8.91,\\6.90,9.76,7.09,11.29,11.25,10.84,10.76,7.42,8.49,10.10,8.79,11.87,8.77,9.43,12.41,9.75,8.53,\\9.72,9.45,7.20,9.23,8.93,9.15,10.19,9.57,11.09,9.97,8.81,10.73,9.57,8.53,9.21,10.08,9.10,11.03,\\10.10,9.47,9.72,9.60,8.21,7.78,10.21,8.99,9.14,8.60,9.14,10.95,9.33,9.98,9.09,10.35,8.61,9.35,\\10.04,7.85,9.64,9.99,9.65,10.89,9.08,8.60,7.56,9.27,10.33,10.09,8.51,9.86,9.24,9.63,8.67,8.85,\\11.57,9.85,9.27,9.69,10.90,8.84,11.10,8.19,9.26,9.93,10.15,8.42,9.36,9.93,9.11,9.07,7.21,8.22,\\9.08,8.88,8.71,9.93,12.04,10.41,10.80,7.17,9.00,9.46,10.42,10.43,8.38,9.01)
 
 \chapter*{Теоретические сведения}
 
@@ -215,8 +301,50 @@
 \chapter*{Результаты работы программы}
 
 \section*{Текст программы}
-\begin{lstlisting}[language=Matlab]
+\begin{lstlisting}[mathescape]
+X = [ 11.89,9.60,9.29,10.06,9.50,8.93,9.58,6.81,8.69,9.62,9.01,10.59,
+10.50,11.53,9.94,8.84,8.91,6.90,9.76,7.09,11.29,11.25,10.84,10.76,7.42,
+8.49,10.10,8.79,11.87,8.77,9.43,12.41,9.75,8.53,9.72,9.45,7.20,9.23,
+8.93,9.15,10.19,9.57,11.09,9.97,8.81,10.73,9.57,8.53,9.21,10.08,9.10,
+11.03,10.10,9.47,9.72,9.60,8.21,7.78,10.21,8.99,9.14,8.60,9.14,10.95,
+9.33,9.98,9.09,10.35,8.61,9.35,10.04,7.85,9.64,9.99,9.65,10.89,9.08,
+8.60,7.56,9.27,10.33,10.09,8.51,9.86,9.24,9.63,8.67,8.85,11.57,9.85,
+9.27,9.69,10.90,8.84,11.10,8.19,9.26,9.93,10.15,8.42,9.36,9.93,9.11,
+9.07,7.21, 8.22,9.08,8.88,8.71,9.93,12.04,10.41,10.80,7.17,9.00,9.46,
+10.42,10.43,8.38,9.01 ];
 
+M_max = max(X);
+M_min = min(X);
+fprintf("\nа) M_max (максимальное значение) = %f; M_min (минимальное значенение) = %f", M_max, M_min);
+
+R = M_max - M_min;
+fprintf("\nб) R (размах) = %f", R);
+
+MX = mean(X);
+DX = var(X);
+fprintf("\nв) $\mu$ (оценка математического ожидания) = %f; S^2 (оценка дисперсии) = %f", MX, DX);
+
+m = floor(log2(length(X))) + 2;
+fprintf("\nг)Группировка значений выборки в m = [log2 n] + 2 интервала: m = %f\n", m);
+
+[counts, edges] = histcounts(X, m, 'BinLimits', [min(X), max(X)]);
+
+delta = R / m;
+hist = histogram();
+hist.BinEdges = edges;
+hist.BinCounts = counts / (length(X) * delta);
+
+hold on; 
+sigma = sqrt(DX);
+x = M_min : (sigma / 100) : M_max;
+f = normpdf(x, MX, sigma);
+plot(x, f, 'red');
+
+F = normcdf(x, MX, sigma);
+figure;
+hold on;
+ecdf(X);
+plot(x, F, 'green');
 \end{lstlisting}
 
 \section*{Результаты расчётов}
