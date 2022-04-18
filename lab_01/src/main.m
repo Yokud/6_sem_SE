@@ -2,11 +2,33 @@ X = [ 11.89,9.60,9.29,10.06,9.50,8.93,9.58,6.81,8.69,9.62,9.01,10.59,10.50,11.53
 
 M_max = max(X);
 M_min = min(X);
+fprintf("\nа) M_max (максимальное значение) = %f; M_min (минимальное значенение) = %f", M_max, M_min);
 
 R = M_max - M_min;
+fprintf("\nб) R (размах) = %f", R);
 
 MX = mean(X);
 DX = var(X);
+fprintf("\nв) μ (оценка математического ожидания) = %f; S^2 (оценка дисперсии) = %f", MX, DX);
 
 m = floor(log2(length(X))) + 2;
-histo = histogram(X, m);
+fprintf("\nг)Группировка значений выборки в m = [log2 n] + 2 интервала: m = %f\n", m);
+
+[counts, edges] = histcounts(X, m, 'BinLimits', [min(X), max(X)]);
+
+delta = R / m;
+hist = histogram();
+hist.BinEdges = edges;
+hist.BinCounts = counts / (length(X) * delta);
+
+hold on; 
+sigma = sqrt(DX);
+x = M_min : (sigma / 100) : M_max;
+f = normpdf(x, MX, sigma);
+plot(x, f, 'red');
+
+F = normcdf(x, MX, sigma);
+figure;
+hold on;
+ecdf(X);
+plot(x, F, 'green');
