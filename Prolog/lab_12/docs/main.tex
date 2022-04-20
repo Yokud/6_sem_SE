@@ -269,25 +269,109 @@ where surname = "Malyshev" and city = "Moscow";
 
 \begin{table}[H]
 	\begin{center}
-		\begin{tabular}{|p{1 cm}|p{9 cm}|p{9 cm}|}
+		\begin{tabular}{|p{1 cm}|p{12 cm}|p{6 cm}|}
 			\hline
 			№ шага & Сравниваемые термы; результат; подстановка, если есть & Дальнейшие действия: прямой ход или откат (к чему приводит?) \\
 			\hline 
-			... & ... & ... \\
+			1 & Сравнение: \newline car\_by\_phone(''+71231421433'', X, Y, Z) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			2-6 & ... & ... \\
+			\hline
+			7 & Сравнение: \newline car\_by\_phone(''+71231421433'', X, Y, Z) = \newline car(''Shatskiy'', ''Suzuki'', ''red'', 10000000). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			8-9 & .. & .. \\
+			\hline
+			10 & Сравнение: \newline car\_by\_phone(''+71231421433'', X, Y, Z) = \newline deposit(''Sazonov'', ''Sber'', 145464235, 1000). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			11-13 & ... & ... \\
+			\hline
+			14 & Сравнение: \newline car\_by\_phone(''+71231421433'', X, Y, Z) = \newline car\_by\_phone(Phone, Surname, Brand, Cost). \newline Унификация успешна. \newline Подстановка: \{Phone=''+71231421433'', Surname=X, Brand=Y, Cost=Z\} & Новое состояние резольвенты: \newline phone\_book(X, ''+71231421433'', \_), car(X, Y, \_, Z). \\
+			\hline
+			15 & Сравнение: \newline phone\_book(X, ''+71231421433'', \_) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)). \newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			16 & Сравнение: \newline phone\_book(X, ''+71231421433'', \_) = \newline phone\_book(''Shatskiy'', ''+71231421433'', address(''Saint Peterburg'', ''Olenevaya'', 12, 4)).\newline Унификация успешна. \newline Подстановка: \{Phone=''+71231421433'', Surname=''Shatskiy'', Brand=Y, Cost=Z\} & Новое состояние резольвенты: \newline car(''Shatskiy'', Y, \_, Z) \\
 			\hline
 		\end{tabular}
 	\end{center}
 \end{table} 
 
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{11 cm}|p{7 cm}|}
+			\hline
+			17 & Сравнение: \newline car(''Shatskiy'', Y, \_, Z) = \newline car(''Shatskiy'', ''Suzuki'', ''red'', 10000000). \newline Унификация успешна. \newline Подстановка: \{Phone=''+71231421433'', Surname=''Shatskiy'', Brand=''Suzuki'', Cost=10000000\} & Новое состояние резольвенты: пуста \newline Вывод: \newline X = ''Shatskiy'', Y = ''Suzuki'', Z = 10000000 \newline Откат, переход к следующему предложению, новая подстановка: \{Phone=''+71231421433'', Surname=''Shatskiy'', Brand=Y, Cost=Z\} \\
+			\hline
+			18 & Сравнение: \newline car(''Shatskiy'', Y, \_, Z) = \newline car(''Gribochkov'', ''BMW'', ''yellow'', 15000000). \newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			19 & ... & ... \\
+			\hline
+			20 & Сравнение: \newline car(''Shatskiy'', Y, \_, Z) = \newline deposit("Sazonov", "Sber", 145464235, 1000). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			21-23 & ... & ... \\
+			\hline
+			24 & Сравнение: \newline car(''Shatskiy'', Y, \_, Z) = \newline car\_by\_phone(Phone, Surname, Brand, Cost). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			25 & Сравнение: \newline car(''Shatskiy'', Y, \_, Z) = \newline brand\_by\_phone(Phone, Brand). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			26 & Сравнение: \newline car(''Shatskiy'', Y, \_, Z) = \newline bank\_and\_street\_by\_surname\_and\_city(Surname, City, Bank, Street, Phone). \newline Унификация неуспешна (несовпадение функторов) & Откат, достижение конца БЗ, переход к следующему предложению относительно шага 14. Подстановок больше нет \\
+			\hline
+			27 & Сравнение: \newline car\_by\_phone(''+71231421433'', X, Y, Z) = \newline bank\_and\_street\_by\_surname\_and\_city(Surname, City, Bank, Street, Phone) . \newline Унификация неуспешна (несовпадение функторов) & Достижение конца БЗ, резольвента пуста, завершение работы \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
 \subsection*{Задание 1b}
 
 \begin{table}[H]
 	\begin{center}
-		\begin{tabular}{|p{1 cm}|p{9 cm}|p{9 cm}|}
+		\begin{tabular}{|p{1 cm}|p{11 cm}|p{7 cm}|}
 			\hline
 			№ шага & Сравниваемые термы; результат; подстановка, если есть & Дальнейшие действия: прямой ход или откат (к чему приводит?) \\
 			\hline 
-			... & ... & ... \\
+			1 & Сравнение: \newline brand\_by\_phone(''+71531432289'', X) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)).\newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			2-14 & ... & ... \\
+			\hline
+			15 & Сравнение: \newline brand\_by\_phone(''+71531432289'', X) = \newline brand\_by\_phone(Phone, Brand). \newline Унификация успешна. \newline Подстановка: \{Phone=''+71531432289'', Brand=X\} & Новое состояние резольвенты: \newline car\_by\_phone(''+71531432289'', \_, X, \_). \\
+			\hline
+			16 & Сравнение: \newline car\_by\_phone(''+71531432289'', \_, X, \_) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)).\newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			17-28 & ... & ... \\
+			\hline
+			29 & Сравнение: \newline car\_by\_phone(''+71531432289'', \_, X, \_) = \newline car\_by\_phone(Phone, Surname, Brand, Cost). \newline Унификация успешна. \newline Подстановка: \{Phone=''+71531432289'', Brand=X\} & Новое состояние резольвенты: \newline phone\_book(Surname, ''+71531432289'', \_), car(Surname, X, \_, \_). \\
+			\hline
+			30 & Сравнение: \newline phone\_book(Surname, ''+71531432289'', \_) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)).\newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			31-32 & ... & ... \\
+			\hline
+			33 & Сравнение: \newline phone\_book(Surname, ''+71531432289'', \_) = \newline phone\_book(''Gribochkov'', ''+71531432289'', address(''Tver'', ''Tomatnaya'', 12, 7)). \newline Унификация успешна. \newline Подстановка: \{Phone=''+71531432289'', Brand=X, Surname=''Gribochkov''\} & Новое состояние резольвенты: \newline car(''Gribochkov'', X, \_, \_). \\
+			\hline
+			34 & Сравнение: \newline car(''Gribochkov'', X, \_, \_) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)).\newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table} 
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{11 cm}|p{7 cm}|}
+			\hline
+			35-40 & ... & ... \\
+			\hline
+			41 & Сравнение: \newline car(''Gribochkov'', X, \_, \_) = \newline car(''Shatskiy'', ''Suzuki'', ''red'', 10000000). \newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			42 & Сравнение: \newline car(''Gribochkov'', X, \_, \_) = \newline car(''Gribochkov'', ''BMW'', ''yellow'', 15000000). \newline Унификация успешна. \newline Подстановка: \{Phone=''+71531432289'', Brand=''BMW''\} & Новое состояние резольвенты: пуста\newline Вывод: X=''BMW'' \newline Откат, переход к следующему предложению, новая подстановка: \{Phone=''+71531432289'', Brand=X, Surname=''Gribochkov''\} \\
+			\hline
+			43 & Сравнение: \newline car(''Gribochkov'', X, \_, \_) = \newline car(''Voronin'', ''Volga'', ''black'', 20000000).\newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline 
+			44 & Сравнение: \newline car(''Gribochkov'', X, \_, \_) = \newline deposit(''Sazonov'', ''Sber'', 145464235, 1000).\newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline 
+			45-50 & ... & ... \\
+			\hline
+			51 & Сравнение: \newline car(''Gribochkov'', X, \_, \_) = \newline bank\_and\_street\_by\_surname\_and\_city(\newline Surname, City, Bank, Street, Phone).\newline Унификация неуспешна (несовпадение функторов) & Откат, достижение конца БЗ, переход к следующему предложению относительно шага 29. Подстановок больше нет \\
+			\hline
+			52 &  Сравнение: \newline car\_by\_phone(''+71531432289'', \_, X, \_) = \newline bank\_and\_street\_by\_surname\_and\_city(\newline Surname, City, Bank, Street, Phone).\newline Унификация неуспешна (несовпадение функторов) & Достижение конца БЗ, резольвента пуста, завершение работы \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -297,11 +381,43 @@ where surname = "Malyshev" and city = "Moscow";
 
 \begin{table}[H]
 	\begin{center}
-		\begin{tabular}{|p{1 cm}|p{9 cm}|p{9 cm}|}
+		\begin{tabular}{|p{1 cm}|p{11 cm}|p{7 cm}|}
 			\hline
 			№ шага & Сравниваемые термы; результат; подстановка, если есть & Дальнейшие действия: прямой ход или откат (к чему приводит?) \\
 			\hline 
-			... & ... & ... \\
+			1 & Сравнение: \newline bank\_and\_street\_by\_surname\_and\_city(\newline ''Malyshev'', ''Moscow'', X, Y, Z) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			2-15 & ... & ... \\
+			\hline
+			16 & Сравнение: \newline bank\_and\_street\_by\_surname\_and\_city(\newline ''Malyshev'', ''Moscow'', X, Y, Z) = \newline bank\_and\_street\_by\_surname\_and\_city(Surname, City, Bank, Street, Phone).  \newline Унификация успешна. \newline Подстановка: \{Surname=''Malyshev'', City=''Moscow'', Bank=X, Street=Y, Phone=Z\} & Новое состояние резольвенты: \newline phone\_book(''Malyshev'', Z, address(''Moscow'', Y, \_, \_)), deposit(''Malyshev'', X, \_, \_) \\
+			\hline
+			17 & Сравнение: \newline phone\_book(''Malyshev'', Z, address(''Moscow'', Y, \_, \_)) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)). \newline Унификация успешна. \newline Подстановка: \{Surname=''Malyshev'', City=''Moscow'', Bank=X, Street=''Obychnaya'', Phone=''+78005553535''\} & Новое состояние резольвенты: \newline deposit(''Malyshev'', X, \_, \_) \\
+			\hline
+			18 & Сравнение: \newline deposit(''Malyshev'', X, \_, \_) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			19-27 & ... & ... \\
+			\hline
+			28 & Сравнение: \newline deposit(''Malyshev'', X, \_, \_) = \newline deposit(''Sazonov'', ''Sber'', 145464235, 1000). \newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			29-30 & ... & ... \\
+			\hline
+			31 & Сравнение: \newline deposit(''Malyshev'', X, \_, \_) = \newline deposit(''Malyshev'', ''Sber'', 364562663, 10000).  \newline Унификация успешна. \newline Подстановка: \{Surname=''Malyshev'', City=''Moscow'', Bank=''Sber'', Street=''Obychnaya'', Phone=''+78005553535''\} & Новое состояние резольвенты: пуста \newline Вывод: Surname=''Malyshev'', City=''Moscow'', X=''Sber'', Y=''Obychnaya'', Z=''+78005553535'' \newline Откат, переход к следующему предложению, новая подстановка: \{Surname=''Malyshev'', City=''Moscow'', Bank=X, Street=''Obychnaya'', Phone=''+78005553535''\} \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table} 
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{11 cm}|p{7 cm}|}
+			\hline
+			32 & Сравнение: \newline deposit(''Malyshev'', X, \_, \_) = \newline car\_by\_phone(Phone, Surname, Brand, Cost) \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			33 & ... & ... \\
+			\hline
+			34 & Сравнение: \newline deposit(''Malyshev'', X, \_, \_) = \newline bank\_and\_street\_by\_surname\_and\_city(Surname, City, Bank, Street, Phone).  \newline Унификация неуспешна (несовпадение функторов) & Откат, достижение конца БЗ, переход к следующему предложению относительно шага 16. Подстановок больше нет \\
+			\hline
+			35 & Сравнение: \newline deposit(''Malyshev'', X, \_, \_) = \newline bank\_and\_street\_by\_surname\_and\_city(Surname, City, Bank, Street, Phone).  \newline Унификация неуспешна (несовпадение функторов) & Достижение конца БЗ, резольвента пуста, завершение работы \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -459,7 +575,6 @@ from surname_city_phone_bank_by_brand_color
 where brand = "Suzuki" and color = "red";
 	
 \end{lstlisting}
-
 
 \section*{Описание порядка поиска ответа}
 
