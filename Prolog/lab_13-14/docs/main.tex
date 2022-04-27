@@ -228,7 +228,63 @@ goal
 			\hline
 			№ шага & Сравниваемые термы; результат; подстановка, если есть & Дальнейшие действия: прямой ход или откат (к чему приводит?) \\
 			\hline 
-			
+			1 & Сравнение:\newline all\_owns\_cost(''Shatskiy'', Name, Cost) =\newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			2-21 & ... & ... \\
+			\hline
+			22 & Сравнение:\newline all\_owns\_cost(''Shatskiy'', Name, Cost) =\newline all\_owns\_cost(Surname, Name, Cost). \newline Унификация успешна \newline Подстановка: {Surname = ''Shatskiy'', Name = Name, Cost = Cost} & Новое состояние резольвенты: \newline owner(''Shatskiy'', car(Name, \_, Cost)) \newline owner(''Shatskiy'', building(Name, Cost))\newline owner(''Shatskiy'', region(Name, Cost))\newline owner(''Shatskiy'', water\_transport(Name, \_, Cost))\newline Откат, переход к следующему предложению \\
+			\hline
+			23 & Сравнение: \newline owner(''Shatskiy'', car(Name, \_, Cost)) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			24-28 & .. & .. \\
+			\hline
+			29 & Сравнение: \newline owner(''Shatskiy'', car(Name, \_, Cost)) =\newline owner(''Shatskiy'', car(''Suzuki'', ''red'', 10000000)). \newline Унификация успешна \newline Подстановка: {Surname = ''Shatskiy'', Name = ''Suzuki'', Cost = 10000000} & Вывод: Surname = ''Shatskiy'', Name = ''Suzuki'', Cost = 10000000 \newline Откат, переход к следующему предложению, новая подстановка: {Surname = ''Shatskiy'', Name = Name, Cost = Cost} \\
+			\hline
+			30 & Сравнение: \newline owner(''Shatskiy'', car(Name, \_, Cost)) =\newline owner(''Gribochkov'', car(''BMW'', ''yellow'', 15000000)).\newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			31-35 & ... & ... \\
+			\hline
+			36 & Сравнение: \newline owner(''Shatskiy'', car(Name, \_, Cost)) =\newline deposit(''Sazonov'', ''Sber'', 145464235, 1000). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			37-53 & ... & Новое состояние резольвенты: \newline owner(''Shatskiy'', building(Name, Cost))\newline owner(''Shatskiy'', region(Name, Cost))\newline owner(''Shatskiy'', water\_transport(Name, \_, Cost)) \newline Откат, достижение БЗ, переход к следующему предложению относительно шага 23 \\
+			\hline
+
+		\end{tabular}
+	\end{center}
+\end{table} 
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{10 cm}|p{8 cm}|}
+			\hline
+			54 & Сравнение: \newline owner(''Shatskiy'', building(Name, Cost)) = \newline phone\_book(''Malyshev'', ''+78005553535'', address(''Moscow'', ''Obychnaya'', 11, 2)). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			55-74 & ... & ... \\
+			\hline
+			75 & Сравнение: \newline owner(''Shatskiy'', building(Name, Cost)) = \newline owner(''Shatskiy'', car(''Suzuki'', ''red'', 10000000)). \newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			76-81 & ... & ... \\
+			\hline
+			82 & Сравнение: \newline owner(''Shatskiy'', building(Name, Cost)) = \newline deposit(''Sazonov'', ''Sber'', 145464235, 1000). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			83-99 & ... & Новое состояние резольвенты: \newline owner(''Shatskiy'', region(Name, Cost))\newline owner(''Shatskiy'', water\_transport(Name, \_, Cost)) \newline Откат, достижение БЗ, переход к следующему предложению относительно шага 23 \\
+			\hline
+			100 & Сравнение: \newline owner(''Shatskiy'', building(Name, Cost)) = \newline owner(''Shatskiy'', car(''Suzuki'', ''red'', 10000000)). \newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			101-05 & ... & ... \\
+			\hline
+			106 & Сравнение: \newline owner(''Shatskiy'', region(Name, Cost)) = \newline deposit(''Sazonov'', ''Sber'', 145464235, 1000). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			107-123 & ... & Новое состояние резольвенты: \newline owner(''Shatskiy'', water\_transport(Name, \_, Cost)) \newline Откат, достижение БЗ, переход к следующему предложению относительно шага 23 \\
+			\hline
+			124 & Сравнение: \newline owner(''Shatskiy'', water\_transport(Name, \_, Cost)) = \newline owner(''Shatskiy'', car(''Suzuki'', ''red'', 10000000)). \newline Унификация неуспешна (несовпадение термов) & Откат, переход к следующему предложению \\
+			\hline
+			125-130 & ... & ... \\
+			\hline
+			131 & Сравнение: \newline owner(''Shatskiy'', water\_transport(Name, \_, Cost)) = \newline deposit(''Sazonov'', ''Sber'', 145464235, 1000). \newline Унификация неуспешна (несовпадение функторов) & Откат, переход к следующему предложению \\
+			\hline
+			129-145 & ... & Новое состояние резольвенты: Пустая \newline Достижение БЗ, завершение работы программы \\
+			\hline
 		\end{tabular}
 	\end{center}
 \end{table} 
@@ -278,10 +334,10 @@ clauses
 	
 	is_parent(human("Elena", f), human("Ivan", m)).
 	is_parent(human("Alexey", m), human("Ivan", m)).
-	is_parent(human("Nina", f), human("Alexey", m)).
-	is_parent(human("Anatoly", m), human("Alexey", m)).
 	is_parent(human("Vera", f), human("Elena", f)).
 	is_parent(human("Evgeny", m), human("Elena", f)).
+	is_parent(human("Nina", f), human("Alexey", m)).
+	is_parent(human("Anatoly", m), human("Alexey", m)).
 
 goal
 	is_grandparent(human(GName, f), _, "Ivan").
@@ -295,13 +351,69 @@ goal
 
 \begin{table}[H]
 	\begin{center}
-		\begin{tabular}{|p{0.92 cm}|p{5 cm}|p{6.5 cm}|p{6 cm}|}
+		\begin{tabular}{|p{1 cm}|p{5 cm}|p{8.5 cm}|p{4 cm}|}
 			\hline
-			№ шага & Состояние резольвенты, и вывод: дальнейшие действия (почему?) & Для каких термов запускается алгоритм унификации: Т1=Т2 и каков результат (и подстановка) & Дальнейшие действия: прямой ход или откат (почему и к чему приводит?) \\
+			№ шага & Состояние резольвенты & Для каких термов запускается алгоритм унификации: Т1=Т2 и каков результат (и подстановка) & Дальнейшие действия: прямой ход или откат \\
 			\hline 
-			
+			1 & is\_parent(human(GName, GSex), human(''Ivan'', PSex)),\newline is\_parent(human(TmpName, PSex), human(Name, \_)).  & Запуск алгоритма унификации для is\_grandparent(human(GName, f), \_, ''Ivan'') и is\_grandparent(human(GName, GSex), PSex, Name).\newline Успешная унификация. Подстановка:\newline GSex = f,  GName = GName, Name = ''Ivan'' & Прямой ход, переход к следующему предложению \\
+			\hline 
+			2 & is\_parent(human(GName, GSex), human(''Ivan'', PSex)),\newline is\_parent(human(PName, PSex), human(Name, \_)). & Запуск алгоритма унификации для is\_parent(human(GrandPName, GSex), human(''Ivan'', PSex)) и is\_grandparent(human(GName, GSex), PSex, Name).\newline Унификация неуспешна. & Прямой ход, переход к следующему предложению  \\
+			\hline 
+			3 & is\_parent(human(GName, f), human(''Elena'', f))  & Запуск алгоритма унификации для is\_parent(human(GName, GSex), human(''Ivan'', PSex)) и is\_parent(human(''Elena'', f), human(''Ivan'', m)).\newline Успешная унификация. Подстановка:\newline GSex = f, Psex = f, GName = GName, TmpName = ''Elena'', Name = ''Ivan'' & Прямой ход, попытка унификации is\_parent(human( GName, f), human(''Elena'', f)) \\
+			\hline 
+			4 & is\_parent(human(GName, f), human(''Elena'', f)) & Запуск алгоритма унификации для is\_parent(human(GName, f), human(''Elena'', f)) и is\_grandparent(human(GName, GSex), PSex, Name).\newline Унификация неуспешна. & Прямой ход, переход к следующему предложению \\
+			\hline 
+			5-6 & ... & ... & ... \\
+			\hline 
+			7 & Пустая & Запуск алгоритма унификации для is\_parent(human(GName, f), human(''Elena'', f))
+			и is\_parent(human(''Vera'', f), human(''Elena'', f)).\newline Унификация успешна. Подстановка:\newline GSex = f, Psex = f, TmpName = ''Elena'', Name = ''Ivan'', GName = ''Vera''. & Получен результат (GName = ''Vera''). Откат (+ откат к следующему предложению относительно 3, т.к. БЗ закончилась) \\
+			\hline 
+			8 & is\_parent(human(GName, f), human(''Alexey'', m)) & Запуск алгоритма унификации для is\_parent(human(GName, GSex), human(''Ivan'', PSex)) и is\_parent(human(''Alexey'', m), human(''Ivan'', m)).\newline Успешная унификация. Подстановка:\newline GSex = f, GName = GName, Psex = m, TmpName = ''Alexey'', Name = ''Ivan'' & Прямой ход, попытка унификации is\_parent(human( GName, f), human(''Alexey'', m)) \\
+			\hline  
 		\end{tabular}
 	\end{center}
 \end{table} 
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|p{1 cm}|p{5 cm}|p{8.5 cm}|p{4 cm}|}
+			\hline 
+			9 & is\_parent(human(GName, f), human(''Alexey'', m))  & Запуск алгоритма унификации для is\_parent(human(GName, f), human(''Alexey'', m))
+			и is\_grandparent(human(GName, GSex), PSex, Name).\newline Унификация неуспешна. &
+			Прямой ход, переход к следующему
+			предложению \\
+			\hline 
+			10-15 & ... & ... & ... \\
+			\hline 
+			16 &  Пустая  & 
+			Запуск алгоритма унификации для is\_parent(human(GName, f), human(''Alexey'', m))
+			и is\_parent(human(''Nina'', f), human(''Alexey'', m)).\newline Успешная унификация. Подстановка:\newline GSex = f, GName = ''Nina'', Psex = m, TmpName = ''Alexey'', Name = ''Ivan'' & 
+			Получен результат (GName = ''Nina''). Откат. \\
+			\hline 
+			17 &
+			is\_parent(human(GName, GSex), human(''Ivan'', PSex)),
+			is\_parent(human(TmpName, PSex), human(Name, \_)). &
+			Запуск алгоритма унификации для is\_parent(human(GName, f), human(''Alexey'', m))
+			и is\_parent(human(''Anatoly'', m), human(''Alexey'', m)).\newline Унификация неуспешна. &
+			Откат, следующее предложение
+			относительно 1 \\
+			\hline 
+			18-22 & ... & ... &  ... \\
+			\hline 
+			23 & is\_grandparent(human( GName, f), \_, ''Ivan''). &
+			Запуск алгоритма унификации для is\_grandparent(human(GName, f), \_, ''Ivan'').
+			и is\_parent(human(''Elena'', f), human(''Ivan'', m)).\newline Унификация неуспешна. & Прямой ход, переход к следующему
+			предложению  \\
+			\hline 
+			24-27 & ... & ... & ... \\
+			\hline 
+			28 & Пустая &
+			Запуск алгоритма унификации для is\_grandparent(human(GName, f), \_, ''Ivan'').
+			и is\_parent(human(''Anatoly'', m), human(''Alexey'', m)).\newline Унификация неуспешна. & Завершение работы. Найдено 2
+			ответа. \\
+			\hline 
+		\end{tabular}
+	\end{center}
+\end{table}
 
 \end{document}
