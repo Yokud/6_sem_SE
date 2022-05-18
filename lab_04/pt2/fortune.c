@@ -65,6 +65,8 @@ ssize_t fortune_write(struct file *filp, const char __user *buf, size_t len, lof
         return -EFAULT;
     }
 
+    printk(KERN_INFO "fortune: called write\n");
+
     next_index += len;
     cookie_buffer[next_index - 1] = '\0';
 
@@ -84,10 +86,10 @@ int fortune_release(struct inode *inode, struct file *file)
 }
 
 static struct proc_ops fops = {
-    .proc_read = read,
-    .proc_write = write,
-    .proc_open = open,
-    .proc_release = release};
+    .proc_read = fortune_read,
+    .proc_write = fortune_write,
+    .proc_open = fortune_open,
+    .proc_release = fortune_release};
 
 static void freemem(void)
 {
